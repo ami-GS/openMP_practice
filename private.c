@@ -6,6 +6,16 @@ main(int argc, char *argv[]) {
 
   int nthreads, threadID;
 
+  int ans = 0;
+  int i , j;
+  // this can avoid inner loop index to be shared
+#pragma omp parallel for private(j) num_threads(3)
+  for (i = 0; i < 10; i++) {
+    for(j = 0; j < 10; j++) {
+      ans = i + j;
+    }
+  }
+
 #pragma omp parallel private(threadID)
   {
     threadID = omp_get_thread_num();
@@ -33,4 +43,5 @@ main(int argc, char *argv[]) {
 	printf("Number of threads = %d\n", nthreads);
       }
   }
+
 }
